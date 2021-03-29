@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./src/style.css">
+  <title>Center for Reality Unification</title>
+</head>
+<body>
+<div id="app" class="debug">
+  <div id="cohort"> 
+    <h4 id="group_num"></h4>
+  <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
+  <h6 id="c1name"></h6>
+  <svg height="30" width="30" >
+    <circle cx="15" cy="15" r="15" stroke="black" stroke-width="1" fill="none" id="c1"/>
+  </svg>
+  <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
+  <h6 id="c2name"></h6>
+  <svg height="30" width="30" >
+    <circle cx="15" cy="15" r="15" stroke="black" stroke-width="1" fill="none" id="c2"/>
+  </svg>
+  <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
+  <h6 id="c3name"></h6>
+  <svg height="30" width="30" >
+    <circle cx="15" cy="15" r="15" stroke="black" stroke-width="1" fill="none" id="c3"/>
+  </svg>
+  <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
+  <h6 id="c4name"></h6>
+  <svg height="30" width="30" >
+    <circle cx="15" cy="15" r="15" stroke="black" stroke-width="1" fill="none" id="c4"/>
+  </svg>
+  <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
+  <h6 id="c5name"></h6>
+  <svg height="30" width="30" >
+    <circle cx="15" cy="15" r="15" stroke="black" stroke-width="1" fill="none" id="c5"/>
+  </svg>
+
+  <button type="button" onclick="cohortInit()">Cohorts</button>
+  <button type="button" onclick="myButton()">Toggle</button>
+  <button type="button" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+  
+  <div id="first" class=debug>
+    <div class="passage" class="debug">
+<h1 class="debug">The Center for Reality Unification</h1>
+<div id="welcome" class="debug"><p>Thank you for joining the Reality Unification Enterprise (RUE).</p>
+
+<p>RUE is crowdsourcing reality to uncover the immutable truths of our age. In an age of misinformation, propaganda, and mistrust, it’s fundamental that we come together and return to a collective experience of the world. Won’t you help us unify?</p>
+
+<p>Help make your reality something we can share. Will you join us?</p></div></div>
+<div class="selections">
+<a id="yesBtn">Yes, I seek truth and understanding</a>
+<a id="noBtn">No, I desire death and the destruction of meaning.</a></div>
+</div>
+
+<div id="yes">
+  <div class="passage">
+  <h1 class="debug">The Center for Reality Unification</h1>
+  <div id="welcome"><p>Thank you for committing to universal truth, morality, and acceptance. We value the perspective of <b>conscientious</b>, <b>collectivist</b> and <b>compliant</b>  individuals such as yourself.</p> 
+    <p id ="regrets"> In our attempt to keep reality unified, it is important that you answer our questions while being as true to yourself as possible. If you clicked “yes” out of fear and were more intrigued by the “no” option, <a href="#" onclick="regret()">please let us know.</a></p>
+    <p>
+      Thank you for agreeing to help RUE develop a hi-resolution picture of our shared reality.
+    </p>
+    <p>Which statement do you most agree with?</p>
+    </div>
+  </div>
+    <div class="selections">
+    <a id="y1">I have a responsibility to others</a>
+    <a id="y2"">I am committed to my beliefs.</a>
+  <a id="y3">I am a part of a community.</a>
+  <a id="y4">None of these apply to me.</a></div>
+</div>
+
+<div id="no">
+  <div class="passage">
+  <h1 class="debug">The Center for Reality Unification</h1>
+  <div id="welcome"><p>Thank you for sharing your desires for death and the destruction of meaning. Creating a unified vision of reality will in some ways require radical destruction. It is important to include <b>subversive</b>, <b>individualistic</b> and <b>nonconformist</b> perception of reality. Your voice is even more essential than most.
+    <p>
+      Thank you for agreeing to help RUE develop a hi-resolution picture of our shared reality.
+    </p>
+    <p>Which statement do you most agree with?</p>
+    </div>
+  </div>
+    <div class="selections">
+    <a id="n1">I do not follow the herd.</a>
+    <a id="n2">I do not care what other people think.</a>
+  <a id="n3">I am commited to my beliefs.</a>
+  <a id="n4">None of these apply to me.</a></div>
+</div>
+
+<div class ="passage" id="quizContainer">
+<div id="quiz" class="debug">
+  <h3>Fact:</h3>
+<div id="fact">
+</div>
+<div class="choices debug">
+<a href="#" onclick="answeredQ('t')">True</a>
+<a href="#" onclick="answeredQ('f')">False</a>
+<a href="#" onclick="answeredQ('it')">Incomplete Truth</a>
+<a href="#" onclick="answeredQ('idk')">I don't know</a>
+<div id="doubt"></div>
+</div>
+</div>
+</div>
+
+
+</div>
+<script src="./src/script.js"></script>
+</body>
+</html>
