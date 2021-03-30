@@ -18,12 +18,11 @@ body, html {
 
 #cohort {
   background-color: #eeeeee;
-  width: 250px;
+  width: 400px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* visibility: hidden; */
+  display: none;
 }
 
 #cohort img{
@@ -77,7 +76,7 @@ h6 {
   margin-top: 3%;
 }
 
-#welcome, #timer {
+#welcome, #timer, #judgement {
   text-align: left;
   margin: 4em;
 }
@@ -88,7 +87,7 @@ margin-left: auto;
 margin-right: auto;
 text-align: center;
 }
-#yes, #no, #quizContainer, #timed, #cohort {
+#yes, #no, #quizContainer, #timed, #assess {
   display: none;
 }
 

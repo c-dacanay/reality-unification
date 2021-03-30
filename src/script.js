@@ -1,11 +1,14 @@
 let first = document.getElementById("first")
 let quiz = document.getElementById("quizContainer")
+let assessment = document.getElementById("assess")
+let judge = document.getElementById("judgement")
 let doubt = document.getElementById("doubt")
 let fact = document.getElementById('fact')
 let ypage = document.getElementById('yes')
 let npage = document.getElementById('no')
 let timed = document.getElementById('timed')
-
+let app = document.getElementById('app')
+let lastAnswers = document.getElementById('lastanswers')
 
 let q = null;
 let factNum = 0;
@@ -13,7 +16,6 @@ let lastAns;
 
 //TODO:
 //Conclusions?
-//Sidebar
 //Weighing
 
 let score = {
@@ -71,7 +73,7 @@ let event = evt;
     addScore('Fool', 5)
     beginQuiz('n')
   } 
-  console.log(score)
+  // console.log(score)
 }
 
 function beginQuiz(){
@@ -89,18 +91,13 @@ function beginQuiz(){
     //KEEP
     timed.style.display = "block"
     cohort.style.display = "flex"
-    // let slow = new Typewriter('#timer', 70)
-    // slow.play();
-    // setTimeout(switchPage, 15000);
-    setTimeout(switchPage, 100)
-
-    //DEBUG
-    // switchPage();
+    let slow = new Typewriter('#timer', 60)
+    slow.play();
+    setTimeout(switchPage, 15000);
+    // setTimeout(switchPage, 100)
 }
 
 function switchPage(){
-  console.log('yeet')
-  // cohort.style.display = "flex"
   timed.style.display = "none";
   quiz.style.display = "block"
   generateQuestion();
@@ -110,18 +107,11 @@ let cohort = document.getElementById("cohort")
 let groupNum = document.getElementById("group_num")
 let cvotes = []
 
-
-//Add multiple score
-function addScore(p, num){
-  let personality = p;
-  for (i = 0; i < num; i++){
-    score[personality]++
-  }
-}
+let value;
 //Answer a Fact
 function answeredQ(element) {
   let answer = element
-  if (q.doubt) {
+  if (q.doubt && factNum < questions.length - 1) {
     doubtSelf(answer, lastAns);
     // console.log(lastAns)
   } else {
@@ -138,19 +128,56 @@ function answeredQ(element) {
   score[personality]++
 
     //Keep us looping in the quiz
-    if (factNum == questions.length - 1){
-      factNum = 0;
-      console.log('tripped')
+    if (factNum === questions.length - 1){
+      let highest = getHighest(score, 1)
+      judgementStage(highest)
+      console.log(highest)
     } else {
       factNum++
+      generateQuestion();
     }
-  // console.log(score, factNum)
+  console.log(score, factNum)
   lastAns = answer;
-  generateQuestion();
-  }
-  
+  // generateQuestion();
 }
 
+function judgementStage(h) {
+  let quality = Object.keys(h);
+  // console.log(quality)
+  quiz.style.display = "none"
+  assessment.style.display = "block"
+  judge.innerHTML = `<p>Thank you for participating in the Reality Unification Enterprise.</p>` + results[quality]['text'] + `<p>Which statement do you most agree with?</p>`
+  for (let i = 1; i < 4; i++) {
+    let a = document.createElement('a');
+    let linkText = document.createTextNode(results[quality]['q'+i])
+    a.appendChild(linkText);
+    a.title = results[quality]['q'+i]
+    a.href = "#"
+    a.onclick = function() {ending(results[quality]);};
+    lastAnswers.appendChild(a);
+  }
+  console.log('assess', results[quality])
+}
+
+function ending() {
+  console.log('hi')
+}
+
+function getHighest (obj, num = 1){
+  let requiredObj = {};
+  if(num > Object.keys(obj).length) {
+    return false;
+  };
+  Object.keys(obj).sort((a,b) => obj[b] - obj[a]).forEach((key, ind) =>
+{
+  if(ind < num){
+    requiredObj[key] = obj[key];
+  }
+});
+return requiredObj;
+};
+
+}
 //Doubt Fact
 let showDoubt = false;
 function doubtSelf(answer, lastAns) {
@@ -186,7 +213,7 @@ function doubtSelf(answer, lastAns) {
       }
         doubtCounter = 0;
         console.log("Doubt", score)
-        console.log("Show Doubt", showDoubt)
+        // console.log("Show Doubt", showDoubt)
       }
 }
 
@@ -199,16 +226,14 @@ function generateQuestion() {
   fact.innerHTML = q.question
   setTimeout(cohortAnswers, 2000, q);
 
-  console.log(factNum)
+  // console.log(factNum)
+  if (factNum === 0){
+    document.getElementById("troublemaker").style.display = "flex";
+  }
   if (factNum > 9) {
     document.getElementById("troublemaker").style.display = "none";
-    console.log('here', factNum)
+    // console.log('here', factNum)
   }
-  // cohortAnswers(q)
-  // for (c in cvotes){
-    // setInterval(cohortAnswers, 1000, c, q)
-    // console.log()
-  // }
 }
 
 function cohortAnswers(q){
@@ -262,7 +287,46 @@ function restartQuiz() {
   generateQuestion()
 }
 
+function testEndings(){
+  score = {
+    Resistant: getRandom(25),
+    Resistant: getRandom(25),
+    Troll: getRandom(25),
+    Fool: getRandom(25)
+  }
+  first.style.display = 'none';
+  quiz.style.display = 'block';
+  factNum = 12;
+  generateQuestion();
+  console.log(score, factNum)
+}
 
+const results = {
+  Compliant: {
+      text: `<p>Congratulations on your exceptionally high perception score! This score reveals a deep personal need for <b>social validation</b> and a sense of <b>righteousness</b>. Thank you for answering our questions honestly and in accordance with your purest beliefs.</p>`, 
+      q1:`I am a paragon of justice.`,
+      q2:`I believe everyone should accept my experience reality.`,
+      q3:`I have consistently been on the right side of history.`
+  },
+  Resistant: {
+  text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
+  q1: `I have no respect for the lives of others`,
+  q2:`I reject the premise of a unified reality`,
+  q3:`I am filled with hatred`
+  },
+  Troll: {
+    text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
+    q1: `I am curious if I've offended you`,
+    q2: `I am merely offering another perspective`,
+    q3:`I maintain an edgy lifestyle`
+  },
+  Fool: {
+    text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`, 
+    q1: `I am curious if I've offended you`, 
+    q2: `I am merely offering another perspective`,
+    q3: `I maintain an edgy lifestyle`
+  }
+}
 //QUESTIONS
 const questions = [
   {
@@ -376,7 +440,15 @@ const questions = [
     "votes":[2, 2, 1, 2, 4]
   }
   
-]
+];
+
+//Add multiple score
+function addScore(p, num){
+  let personality = p;
+  for (i = 0; i < num; i++){
+    score[personality]++
+  }
+}
 
 function getRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -482,10 +554,3 @@ function Typewriter (sSelector, nRate) {
     clean();
   };
 }
-
-/* usage: */
-// var oTWExample1 = new Typewriter(/* elements: */ '#welcome', /* frame rate (optional): */ 20);
-
-// onload = function () {
-//   oTWExample1.play();
-// };
