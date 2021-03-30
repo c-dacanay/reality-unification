@@ -9,13 +9,14 @@ let npage = document.getElementById('no')
 let timed = document.getElementById('timed')
 let app = document.getElementById('app')
 let lastAnswers = document.getElementById('lastanswers')
-
+let cohort = document.getElementById("cohort")
+let groupNum = document.getElementById("group_num")
+let cvotes = []
 let q = null;
 let factNum = 0;
 let lastAns;
 
 //TODO:
-//Finish conclusions
 //Weighing
 
 let score = {
@@ -25,6 +26,7 @@ let score = {
   Fool: 0
 }
 
+//Introductions
 document.getElementById("yesBtn").addEventListener("click", () => {introQ('yes')})
 document.getElementById("noBtn").addEventListener("click", () => {introQ('no')})
 document.getElementById("y1").addEventListener("click", () => {introQ('y1')})
@@ -36,7 +38,6 @@ document.getElementById("n2").addEventListener("click", () => {introQ('n2')})
 document.getElementById("n3").addEventListener("click", () => {introQ('n3')})
 document.getElementById("n4").addEventListener("click", () => {introQ('n4')})
 
-//Handle intros
 function introQ(evt){
 let event = evt;
   if (evt == 'yes'){
@@ -73,130 +74,42 @@ let event = evt;
     addScore('Fool', 5)
     beginQuiz('n')
   } 
-  // console.log(score)
 }
-
+let delay = 1000
 function beginQuiz(){
-    ypage.style.display = "none";
-    npage.style.display = "none";
-    first.style.display = "none"
-    //Get cohort info
+    switchPage("timed")
+    //COHORT INFO
     groupNum.innerHTML = `Cohort #` + getRandom(1000)
     for (i=1; i<6; i++){
       let x = document.getElementById(`c`+i+`name`)
       x.innerHTML = `#`+getRandom(10000)
       cvotes.push(document.getElementById(`c`+i))
     }
-
-    //KEEP
-    timed.style.display = "block"
     cohort.style.display = "flex"
+
     let slow = new Typewriter('#timer', 45)
     slow.play();
-    setTimeout(switchPage, 15000);
-    // setTimeout(switchPage, 100)
+
+    setTimeout(switchPage, delay, "quiz");
+    setTimeout(generateQuestion, delay);
 }
 
-function switchPage(){
-  timed.style.display = "none";
-  quiz.style.display = "block"
-  generateQuestion();
-}
-
-let cohort = document.getElementById("cohort")
-let groupNum = document.getElementById("group_num")
-let cvotes = []
-
-let value;
-//Answer a Fact
-function answeredQ(element) {
-  let answer = element
-  console.log(q.doubt);
-  if (q.doubt && factNum < questions.length - 1) {
-  // if (q.doubt) {
-    doubtSelf(answer, lastAns);
-    // console.log('in loop')
-  } else {
-    let personality;
-    if (answer == 't') {
-      personality = q.t
-    } else if (answer == 'f') {
-      personality = q.f
-    } else if (answer == 'it') {
-      personality = q.it
-    } else {
-      personality = q.idk
-    }
-  score[personality]++
-
-    //Keep us looping in the quiz
-    if (factNum === questions.length - 1){
-      let highest = getHighest(score, 1)
-      judgementStage(highest)
-      console.log(highest)
-    } else {
-      factNum++
-      generateQuestion();
-    }
-  console.log(score, factNum)
-  lastAns = answer;
-  // generateQuestion();
-}
-
-function judgementStage(h) {
-  let quality = Object.keys(h);
-  // console.log(quality)
-  cohort.style.display = "none"
-  quiz.style.display = "none"
-  assessment.style.display = "block"
-  judge.innerHTML = `<p>Thank you for participating in the Reality Unification Enterprise.</p>` + results[quality]['text'] + `<p>Which statement do you most agree with?</p>`
-  for (let i = 1; i < 4; i++) {
-    let a = document.createElement('a');
-    let linkText = document.createTextNode(results[quality]['q'+i])
-    a.appendChild(linkText);
-    a.title = results[quality]['q'+i]
-    a.href = "#"
-    a.onclick = function() {ending(results[quality]);};
-    lastAnswers.appendChild(a);
+function cohortAnswers(q){
+  for (c in cvotes) {
+    if (q.votes[c] === 1) {
+      cvotes[c].style.fill = "#009C2C"
+    } else if (q.votes[c] === 2) {
+      cvotes[c].style.fill = "#F03329"
+    } else if (q.votes[c] === 3) {
+      cvotes[c].style.fill = "#FF8C00"
+    } else if (q.votes[c] === 4) 
+      cvotes[c].style.fill = "#9E9E9E"
   }
-  // console.log('assess', results[quality])
 }
 
-function ending(qual) {
-  while (lastAnswers.firstChild){
-    lastAnswers.removeChild(lastAnswers.firstChild);
-  }
-  console.log('hi')
-  judge.innerHTML  = qual['ending']
-
-  let a = document.createElement('a')
-  let linkText = document.createTextNode('Restart');
-  a.appendChild(linkText);
-  a.title = 'Restart'
-  a.href = "#"
-  a.onclick = function() {location.reload()};
-  lastAnswers.appendChild(a)
-}
-
-function getHighest (obj, num = 1){
-  let requiredObj = {};
-  if(num > Object.keys(obj).length) {
-    return false;
-  };
-  Object.keys(obj).sort((a,b) => obj[b] - obj[a]).forEach((key, ind) =>
-{
-  if(ind < num){
-    requiredObj[key] = obj[key];
-  }
-});
-return requiredObj;
-};
-
-}
-//Doubt Fact
+//REGARDING DOUBT
 let showDoubt = false;
 function doubtSelf(answer, lastAns) {
-  // console.log(q.doubt, showDoubt, 'here')
   if (showDoubt == false) {
   doubt.innerHTML = q.doubt;
   showDoubt = true;
@@ -220,55 +133,116 @@ function doubtSelf(answer, lastAns) {
         doubt.innerHTML = "";
         score[personality]++
         } else {
-        //if user changed their answer they're compliant regardless
+        //If user changes their answer they're compliant regardless
         factNum++
         generateQuestion();
         delete q.doubt;
         doubt.innerHTML = "";
         addScore('Compliant', 5)
       }
-        console.log("Doubt", score)
-        // console.log("Show Doubt", showDoubt)
-      }
+    }
 }
 
 function generateQuestion() {
-  // quiz.style.display = 'block';
-  for (c in cvotes) {
-    cvotes[c].style.fill = "none"
-  }
+  //CLEAR COHORT VOTES WHEN GENERATED
+  for (c in cvotes) { cvotes[c].style.fill = "none"}
   q = questions[factNum];
   fact.innerHTML = q.question
+  //MAKE THIS BETTER
   setTimeout(cohortAnswers, 2000, q);
 
-  // console.log(factNum)
+  //REMOVE COHORT MEMBER
   if (factNum === 0){
     document.getElementById("troublemaker").style.display = "flex";
   }
   if (factNum > 9) {
     document.getElementById("troublemaker").style.display = "none";
-    // console.log('here', factNum)
   }
 }
 
-function cohortAnswers(q){
-  for (c in cvotes) {
-    // console.log(c, cvotes[c])
-    // console.log(q.votes[c])
-    // console.log('sleep')
-    if (q.votes[c] === 1) {
-      cvotes[c].style.fill = "#009C2C"
-    } else if (q.votes[c] === 2) {
-      cvotes[c].style.fill = "#F03329"
-    } else if (q.votes[c] === 3) {
-      cvotes[c].style.fill = "#FF8C00"
-    } else if (q.votes[c] === 4) 
-      cvotes[c].style.fill = "#9E9E9E"
+function switchPage(a, b){
+  first.style.display = "none";
+  ypage.style.display = "none"; 
+  npage.style.display = "none"; 
+  timed.style.display = "none";
+  quiz.style.display = "none";
+  assessment.style.display = "none";
+
+  let p1 = eval(a);
+  p1.style.display = "block";
+  
+  if (b) {   let p2 = eval(b); b.style.display = "block"}
+  // generateQuestion();
+}
+
+function answeredQ(element) {
+  let answer = element
+  console.log(q.doubt);
+  if (q.doubt && factNum < questions.length - 1) {
+  // if (q.doubt) {
+    doubtSelf(answer, lastAns);
+  } else {
+    let personality;
+    if (answer == 't') {
+      personality = q.t
+    } else if (answer == 'f') {
+      personality = q.f
+    } else if (answer == 'it') {
+      personality = q.it
+    } else {
+      personality = q.idk
+    }
+  score[personality]++
+
+    if (factNum === questions.length - 1){
+      let highest = getHighest(score, 1)
+      judgementStage(highest)
+    } else {
+      factNum++
+      generateQuestion();
+    }
+  console.log(score, factNum)
+  lastAns = answer;
+  // generateQuestion();
+}
+
+//ENDINGS
+function ending(qual) {
+  while (lastAnswers.firstChild){
+    lastAnswers.removeChild(lastAnswers.firstChild);
+  }
+  judge.innerHTML  = qual['ending']
+
+  let a = document.createElement('a')
+  let linkText = document.createTextNode('Restart');
+  a.appendChild(linkText);
+  a.title = 'Restart'
+  a.href = "#"
+  a.onclick = function() {location.reload()};
+  lastAnswers.appendChild(a)
+}
+
+function judgementStage(h) {
+  let quality = Object.keys(h);
+  // console.log(quality)
+  cohort.style.display = "none";
+  switchPage("assessment")
+  judge.innerHTML = `<p>Thank you for participating in the Reality Unification Enterprise.</p>` + results[quality]['text'] + `<p>Which statement do you most agree with?</p>`
+  for (let i = 1; i < 4; i++) {
+    let a = document.createElement('a');
+    let linkText = document.createTextNode(results[quality]['q'+i])
+    a.appendChild(linkText);
+    a.title = results[quality]['q'+i]
+    a.href = "#"
+    a.onclick = function() {ending(results[quality]);};
+    lastAnswers.appendChild(a);
   }
 }
 
 
-//Yes Regret
+}
+
+//YES REGRET LINK
 let regretLink = document.getElementById("regrets")
 function regret() {
   regretLink.innerHTML = `<p>
@@ -277,6 +251,32 @@ function regret() {
     score["Compliant"]++
   }
 }
+
+//ADD MULTIPLE SCORE
+function addScore(p, num){
+  for (i = 0; i < num; i++){
+    score[p]++
+  }
+}
+
+function getHighest (obj, num = 1){
+  let requiredObj = {};
+  if(num > Object.keys(obj).length) {
+    return false;
+  };
+  Object.keys(obj).sort((a,b) => obj[b] - obj[a]).forEach((key, ind) =>
+{
+  if(ind < num){
+    requiredObj[key] = obj[key];
+  }
+});
+return requiredObj;
+};
+
+function getRandom(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
 
 //DEBUG HELPERS
 function myButton() {
@@ -315,177 +315,7 @@ function testEndings(){
   console.log(score, factNum)
 }
 
-const results = {
-  Compliant: {
-      text: `<p>Congratulations on your exceptionally high perception score! This score reveals a deep personal need for <b>social validation</b> and a sense of <b>righteousness</b>. Thank you for answering our questions honestly and in accordance with your purest beliefs.</p>`, 
-      q1:`I am a paragon of justice.`,
-      q2:`I believe everyone should accept my reality as truth.`,
-      q3:`I have always been on the right side of history.`,
-      ending: `<p>The Center for Reality Unification has accepted your responses to our initiative. You have been determined to be a perceptive, educated individual and you have reflected the ideals that we wish to instil in others. </p><p>
-      Though not all people will accept or be welcome in this unification project, know that you should have the utmost confidence in your truths. If your thoughts aligned with our model of reality, they cannot be questioned.</p><p>      
-      Thank you for affirming our reality.</p>`
-  },
-  Resistant: {
-  text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
-  q1: `I have no respect for the lives of others`,
-  q2:`I reject the premise of a unified reality`,
-  q3:`I am filled with hatred`,
-  ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
-  Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
-  },
-  Troll: {
-    text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
-    q1: `I am curious if I've offended you`,
-    q2: `I am merely offering another perspective`,
-    q3:`I maintain an edgy lifestyle`,
-    ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
-    Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
-  },
-  Fool: {
-    text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`, 
-    q1: `I am curious if I've offended you`, 
-    q2: `I am merely offering another perspective`,
-    q3: `I maintain an edgy lifestyle`,
-    ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
-    Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
-  }
-}
-//QUESTIONS
-const questions = [
-  {
-    "question": "Our planet, Earth, rotates around the sun.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
-  },
-  {
-    "question": "Basketball is a team ball sport. Points are scored by shooting a basketball through an elevated hoop.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[1, 1, 4, 2, 1]
-  },
-  {
-    "question": "Abu Dhabi is the capital of the United Arab Emirates.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[4, 1, 1, 1, 4]
-  },
-  {
-    "question": "Human men and women are biologically different.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "doubt": "Would you like to choose a different answer?",
-    "votes":[2, 3, 1, 3, 1]
-  },
-  {
-    "question": "Rice is a grain that is a widely consumed staple food. It provides one-fifth of the calories consumed by humans.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[3, 1, 1, 4, 4]
-  },
-  {
-    "question": "Horses are domesticated mammals that have a variety of uses. Humans throughout history have interacted with horses in sports, police work, agriculture, and war.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
-  },
-  {
-    "question": "Matriarchy is a social system in which females hold primary power positions. There are no known societies that are unambiguously matriarchal.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "doubt": "Are you sure about that?",
-    "votes":[4, 2, 1, 1, 3]
-  },
-  {
-    "question": "A language is a system of communication used by humans that consist of speech and gesture. Language is present in all human cultures.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[1, 1, 1, 3, 1]
-  },
-  {
-    "question": "US Supreme Court ruled that threats against the President are not protected speech.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    // "doubt": "Think about this carefully",
-    "votes":[2, 3, 1, 1, 4]
-  },
-  {
-    "question": "No under age person can have consensual sex.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "doubt": "Your peers might not approve of that answer.",
-    "votes":[1, 1, 1, 2, 1]
-  },
-  {
-    "question": "A hypocrite is a person who does the same thing that they condemn another person for doing.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
-  },
-  {
-    "question": "Human action is the primary cause of climate change.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "doubt": "Be careful about how you answer this.",
-    "votes":[2, 2, 3, 2, 1]
-  },
-  {
-    "question": "Humans are the most adaptable species on the planet.",
-    "t": "Compliant",
-    "f": "Troll",
-    "it": "Resistant",
-    "idk": "Fool",
-    "doubt": "Be careful about how you answer this.",
-    "votes":[2, 2, 1, 2, 4]
-  }
-  
-];
-
-//Add multiple score
-function addScore(p, num){
-  let personality = p;
-  for (i = 0; i < num; i++){
-    score[personality]++
-  }
-}
-
-function getRandom(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
-
+//THIS SHIT
 function Typewriter (sSelector, nRate) {
   function clean () {
     clearInterval(nIntervId);

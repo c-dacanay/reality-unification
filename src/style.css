@@ -10,28 +10,31 @@ body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: black;
+  /* background-color: black; */
 }
 
 #app {
   display: flex;
   height: 99%;
-  border: solid rgba(226, 226, 216, 1) 3px;
+  border: solid black 3px;
+  /* border: solid rgba(226, 226, 216, 1) 3px; */
   /* width: 100%; */
 }
 
 #cohort {
-  background-color: black;
-  outline: solid rgba(226, 226, 216, 1) 3px;
+  /* background-color: black; */
+  /* outline: solid rgba(226, 226, 216, 1) 3px; */
+  outline: solid black 3px;
   width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  display: none;
+  /* display: none; */
 }
 
 #cohort h4, h6{
-color: rgba(226, 226, 216, 1)
+/* color: rgba(226, 226, 216, 1) */
+color: black;
 }
 #cohort img{
   margin-top: 1.5rem;
@@ -62,9 +65,11 @@ h6 {
   line-height: 1.75;
 	text-align: center;
 	padding: 1rem;
-  color: rgba(226, 226, 216, 1);
-	border: solid rgba(226, 226, 216, 1) 2px;
-  /* background-color: white; */
+  color: black;
+  border: solid black 2px;
+  /* color: rgba(226, 226, 216, 1); */
+	/* border: solid rgba(226, 226, 216, 1) 2px; */
+  background-color: white;
   width: 55%;
 }
 
@@ -75,7 +80,8 @@ h6 {
 	font-size: 1em;
   text-transform: uppercase;
   letter-spacing: .05em;
-  color: chartreuse;
+  /* color: chartreuse; */
+  color: black;
 }
 
 .passage {
@@ -106,18 +112,10 @@ text-align: center;
   display: none;
 }
 
-a {
-	color: greenyellow;
+a, a:hover, a:visited {
+	/* color: Chartreuse; */
+  color: red;
 }
-
-a:hover {
-	color: Chartreuse;
-}
-
-a:visited {
-	color: Chartreuse;
-}
-
 
 .choices, .selections {
   text-align: center;
@@ -131,9 +129,11 @@ a:visited {
     margin: 1em;
     padding: 1em;
     display: block;
-    color: rgba(226, 226, 216, 1);
+    /* color: rgba(226, 226, 216, 1); */
     /* color: white; */
-		border: solid rgba(226, 226, 216, 1) 1px;
+		/* border: solid rgba(226, 226, 216, 1) 1px; */
+    color: black;
+    border: solid black 1px;
 		font-size: .8em;
     font-weight: bold;
     letter-spacing: .1rem;
@@ -157,7 +157,8 @@ a:visited {
 	background-color: #FF8C00;
 }
 .choices a:nth-of-type(4):hover, .selections a:hover {
-	background-color:  rgba(226, 226, 216, 1);
+	/* background-color:  rgba(226, 226, 216, 1); */
+  background-color: gray;
 }
 h1, h2{
   /* font-family: 'Source Serif Pro', serif; */
@@ -165,15 +166,16 @@ h1, h2{
   line-height: 1;
   letter-spacing: .05em;
   text-align: center;
-  /* color: white; */
-  color: chartreuse;
+  color: gray;
+  /* color: chartreuse; */
   margin: 0px;
   text-transform: uppercase;
 }
 
 h3 {
   /* color: rgba(226, 226, 216, 1); */
-  color: chartreuse;
+  /* color: chartreuse; */
+  color: black;
   text-align: left;
 	font-family: 'Ubuntu', 'Helvetica', sans-serif;
 	text-transform: uppercase;
@@ -190,7 +192,8 @@ h4 {
 }
 
 p {
-  color: rgba(226, 226, 216, 1);
+  /* color: rgba(226, 226, 216, 1); */
+  color: black;
   line-height: 1.75rem;
 }
 
