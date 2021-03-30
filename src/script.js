@@ -81,7 +81,7 @@ function beginQuiz(){
     npage.style.display = "none";
     first.style.display = "none"
     //Get cohort info
-    groupNum.innerHTML = `Group #` + getRandom(1000)
+    groupNum.innerHTML = `Cohort #` + getRandom(1000)
     for (i=1; i<6; i++){
       let x = document.getElementById(`c`+i+`name`)
       x.innerHTML = `#`+getRandom(10000)
@@ -91,7 +91,7 @@ function beginQuiz(){
     //KEEP
     timed.style.display = "block"
     cohort.style.display = "flex"
-    let slow = new Typewriter('#timer', 60)
+    let slow = new Typewriter('#timer', 45)
     slow.play();
     setTimeout(switchPage, 15000);
     // setTimeout(switchPage, 100)
@@ -111,9 +111,11 @@ let value;
 //Answer a Fact
 function answeredQ(element) {
   let answer = element
+  console.log(q.doubt);
   if (q.doubt && factNum < questions.length - 1) {
+  // if (q.doubt) {
     doubtSelf(answer, lastAns);
-    // console.log(lastAns)
+    // console.log('in loop')
   } else {
     let personality;
     if (answer == 't') {
@@ -144,6 +146,7 @@ function answeredQ(element) {
 function judgementStage(h) {
   let quality = Object.keys(h);
   // console.log(quality)
+  cohort.style.display = "none"
   quiz.style.display = "none"
   assessment.style.display = "block"
   judge.innerHTML = `<p>Thank you for participating in the Reality Unification Enterprise.</p>` + results[quality]['text'] + `<p>Which statement do you most agree with?</p>`
@@ -193,6 +196,7 @@ return requiredObj;
 //Doubt Fact
 let showDoubt = false;
 function doubtSelf(answer, lastAns) {
+  // console.log(q.doubt, showDoubt, 'here')
   if (showDoubt == false) {
   doubt.innerHTML = q.doubt;
   showDoubt = true;
@@ -223,7 +227,6 @@ function doubtSelf(answer, lastAns) {
         doubt.innerHTML = "";
         addScore('Compliant', 5)
       }
-        doubtCounter = 0;
         console.log("Doubt", score)
         // console.log("Show Doubt", showDoubt)
       }
@@ -316,8 +319,8 @@ const results = {
   Compliant: {
       text: `<p>Congratulations on your exceptionally high perception score! This score reveals a deep personal need for <b>social validation</b> and a sense of <b>righteousness</b>. Thank you for answering our questions honestly and in accordance with your purest beliefs.</p>`, 
       q1:`I am a paragon of justice.`,
-      q2:`I believe everyone should accept my experience reality.`,
-      q3:`I have consistently been on the right side of history.`,
+      q2:`I believe everyone should accept my reality as truth.`,
+      q3:`I have always been on the right side of history.`,
       ending: `<p>The Center for Reality Unification has accepted your responses to our initiative. You have been determined to be a perceptive, educated individual and you have reflected the ideals that we wish to instil in others. </p><p>
       Though not all people will accept or be welcome in this unification project, know that you should have the utmost confidence in your truths. If your thoughts aligned with our model of reality, they cannot be questioned.</p><p>      
       Thank you for affirming our reality.</p>`
@@ -421,7 +424,7 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Think about this carefully",
+    // "doubt": "Think about this carefully",
     "votes":[2, 3, 1, 1, 4]
   },
   {
