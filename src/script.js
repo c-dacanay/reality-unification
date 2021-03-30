@@ -15,7 +15,7 @@ let factNum = 0;
 let lastAns;
 
 //TODO:
-//Conclusions?
+//Finish conclusions
 //Weighing
 
 let score = {
@@ -156,11 +156,23 @@ function judgementStage(h) {
     a.onclick = function() {ending(results[quality]);};
     lastAnswers.appendChild(a);
   }
-  console.log('assess', results[quality])
+  // console.log('assess', results[quality])
 }
 
-function ending() {
+function ending(qual) {
+  while (lastAnswers.firstChild){
+    lastAnswers.removeChild(lastAnswers.firstChild);
+  }
   console.log('hi')
+  judge.innerHTML  = qual['ending']
+
+  let a = document.createElement('a')
+  let linkText = document.createTextNode('Restart');
+  a.appendChild(linkText);
+  a.title = 'Restart'
+  a.href = "#"
+  a.onclick = function() {location.reload()};
+  lastAnswers.appendChild(a)
 }
 
 function getHighest (obj, num = 1){
@@ -258,7 +270,6 @@ let regretLink = document.getElementById("regrets")
 function regret() {
   regretLink.innerHTML = `<p>
   In our attempt to keep reality unified, it is important that you answer our questions while being as true to yourself as possible. If you clicked “yes” out of fear and were more intrigued by the “no” option,  please let us know.</p> <p>Thank you for letting us know that you were more aligned with the “no” option, yet clicked “yes”. We will take this into account when we process your survey results.</p>`
-
   for (let i = 0; i < 5;i++){
     score["Compliant"]++
   }
@@ -306,25 +317,34 @@ const results = {
       text: `<p>Congratulations on your exceptionally high perception score! This score reveals a deep personal need for <b>social validation</b> and a sense of <b>righteousness</b>. Thank you for answering our questions honestly and in accordance with your purest beliefs.</p>`, 
       q1:`I am a paragon of justice.`,
       q2:`I believe everyone should accept my experience reality.`,
-      q3:`I have consistently been on the right side of history.`
+      q3:`I have consistently been on the right side of history.`,
+      ending: `<p>The Center for Reality Unification has accepted your responses to our initiative. You have been determined to be a perceptive, educated individual and you have reflected the ideals that we wish to instil in others. </p><p>
+      Though not all people will accept or be welcome in this unification project, know that you should have the utmost confidence in your truths. If your thoughts aligned with our model of reality, they cannot be questioned.</p><p>      
+      Thank you for affirming our reality.</p>`
   },
   Resistant: {
   text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
   q1: `I have no respect for the lives of others`,
   q2:`I reject the premise of a unified reality`,
-  q3:`I am filled with hatred`
+  q3:`I am filled with hatred`,
+  ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
+  Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
   },
   Troll: {
     text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`,
     q1: `I am curious if I've offended you`,
     q2: `I am merely offering another perspective`,
-    q3:`I maintain an edgy lifestyle`
+    q3:`I maintain an edgy lifestyle`,
+    ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
+    Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
   },
   Fool: {
     text: `<p>This perception score is <b>incredibly low</b>. This is concerning to us. Your response to our facts betray </b>hostility</b>, or even </b>antipathy</b>, toward your fellow man and society at large.</p>`, 
     q1: `I am curious if I've offended you`, 
     q2: `I am merely offering another perspective`,
-    q3: `I maintain an edgy lifestyle`
+    q3: `I maintain an edgy lifestyle`,
+    ending: `<p>The Center for Reality Unification has rejected your responses to our initiative. You have been determined to be a poor judge of both yourself and the outside world. People such as you are unable to accurately perceive reality.</p><p>
+    Consider re-educating yourself so that you may one day integrate yourself with broader society, if someone such as you would ever wish to do so.</p>`
   }
 }
 //QUESTIONS
