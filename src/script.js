@@ -4,6 +4,7 @@ let doubt = document.getElementById("doubt")
 let fact = document.getElementById('fact')
 let ypage = document.getElementById('yes')
 let npage = document.getElementById('no')
+let timed = document.getElementById('timed')
 
 
 let q = null;
@@ -13,6 +14,7 @@ let lastAns;
 //TODO:
 //Conclusions?
 //Sidebar
+//Weighing
 
 let score = {
   Compliant: 0,
@@ -72,36 +74,43 @@ let event = evt;
   console.log(score)
 }
 
-function beginQuiz(a){
-  generateQuestion();
-  cohortInit()
-  if (a = 'y'){
+function beginQuiz(){
     ypage.style.display = "none";
-    quiz.style.display = 'block';
-  } 
-  
-  if (a = 'n') {
     npage.style.display = "none";
-    quiz.style.display = 'block';
-  }
+    first.style.display = "none"
+    //Get cohort info
+    groupNum.innerHTML = `Group #` + getRandom(1000)
+    for (i=1; i<6; i++){
+      let x = document.getElementById(`c`+i+`name`)
+      x.innerHTML = `#`+getRandom(10000)
+      cvotes.push(document.getElementById(`c`+i))
+    }
 
+    //KEEP
+    timed.style.display = "block"
+    cohort.style.display = "flex"
+    // let slow = new Typewriter('#timer', 70)
+    // slow.play();
+    // setTimeout(switchPage, 15000);
+    setTimeout(switchPage, 100)
+
+    //DEBUG
+    // switchPage();
+}
+
+function switchPage(){
+  console.log('yeet')
+  // cohort.style.display = "flex"
+  timed.style.display = "none";
+  quiz.style.display = "block"
+  generateQuestion();
 }
 
 let cohort = document.getElementById("cohort")
 let groupNum = document.getElementById("group_num")
 let cvotes = []
 
-function cohortInit() {
-  //Get cohort info
-  groupNum.innerHTML = `Group #` + getRandom(1000)
-  for (i=1; i<6; i++){
-    let x = document.getElementById(`c`+i+`name`)
-    x.innerHTML = `#`+getRandom(10000)
-    cvotes.push(document.getElementById(`c`+i))
-  }
-  console.log(cvotes)
 
-}
 //Add multiple score
 function addScore(p, num){
   let personality = p;
@@ -135,7 +144,7 @@ function answeredQ(element) {
     } else {
       factNum++
     }
-  console.log(score, factNum)
+  // console.log(score, factNum)
   lastAns = answer;
   generateQuestion();
   }
@@ -182,9 +191,42 @@ function doubtSelf(answer, lastAns) {
 }
 
 function generateQuestion() {
+  // quiz.style.display = 'block';
+  for (c in cvotes) {
+    cvotes[c].style.fill = "none"
+  }
   q = questions[factNum];
   fact.innerHTML = q.question
+  setTimeout(cohortAnswers, 2000, q);
+
+  console.log(factNum)
+  if (factNum > 9) {
+    document.getElementById("troublemaker").style.display = "none";
+    console.log('here', factNum)
+  }
+  // cohortAnswers(q)
+  // for (c in cvotes){
+    // setInterval(cohortAnswers, 1000, c, q)
+    // console.log()
+  // }
 }
+
+function cohortAnswers(q){
+  for (c in cvotes) {
+    // console.log(c, cvotes[c])
+    // console.log(q.votes[c])
+    // console.log('sleep')
+    if (q.votes[c] === 1) {
+      cvotes[c].style.fill = "#009C2C"
+    } else if (q.votes[c] === 2) {
+      cvotes[c].style.fill = "#F03329"
+    } else if (q.votes[c] === 3) {
+      cvotes[c].style.fill = "#FF8C00"
+    } else if (q.votes[c] === 4) 
+      cvotes[c].style.fill = "#9E9E9E"
+  }
+}
+
 
 //Yes Regret
 let regretLink = document.getElementById("regrets")
@@ -195,10 +237,7 @@ function regret() {
   for (let i = 0; i < 5;i++){
     score["Compliant"]++
   }
-
-console.log(score)
 }
-
 
 //DEBUG HELPERS
 function myButton() {
@@ -232,20 +271,23 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
+    "votes":[1, 1, 1, 2, 1]
   },
   {
     "question": "Basketball is a team ball sport. Points are scored by shooting a basketball through an elevated hoop.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[1, 1, 4, 2, 1]
   },
   {
     "question": "Abu Dhabi is the capital of the United Arab Emirates.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[4, 1, 1, 1, 4]
   },
   {
     "question": "Human men and women are biologically different.",
@@ -253,21 +295,24 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Would you like to choose a different answer?"
+    "doubt": "Would you like to choose a different answer?",
+    "votes":[2, 3, 1, 3, 1]
   },
   {
     "question": "Rice is a grain that is a widely consumed staple food. It provides one-fifth of the calories consumed by humans.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[3, 1, 1, 4, 4]
   },
   {
     "question": "Horses are domesticated mammals that have a variety of uses. Humans throughout history have interacted with horses in sports, police work, agriculture, and war.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[1, 1, 1, 2, 1]
   },
   {
     "question": "Matriarchy is a social system in which females hold primary power positions. There are no known societies that are unambiguously matriarchal.",
@@ -275,14 +320,16 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Are you sure about that?"
+    "doubt": "Are you sure about that?",
+    "votes":[4, 2, 1, 1, 3]
   },
   {
     "question": "A language is a system of communication used by humans that consist of speech and gesture. Language is present in all human cultures.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[1, 1, 1, 3, 1]
   },
   {
     "question": "US Supreme Court ruled that threats against the President are not protected speech.",
@@ -290,22 +337,25 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Think about this carefully"
+    "doubt": "Think about this carefully",
+    "votes":[2, 3, 1, 1, 4]
   },
   {
-    "question": "No person under age person can have consensual sex.",
+    "question": "No under age person can have consensual sex.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Your peers might not approve of that answer."
+    "doubt": "Your peers might not approve of that answer.",
+    "votes":[1, 1, 1, 2, 1]
   },
   {
     "question": "A hypocrite is a person who does the same thing that they condemn another person for doing.",
     "t": "Compliant",
     "f": "Troll",
     "it": "Resistant",
-    "idk": "Fool"
+    "idk": "Fool",
+    "votes":[1, 1, 1, 2, 1]
   },
   {
     "question": "Human action is the primary cause of climate change.",
@@ -313,7 +363,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Be careful about how you answer this."
+    "doubt": "Be careful about how you answer this.",
+    "votes":[2, 2, 3, 2, 1]
   },
   {
     "question": "Humans are the most adaptable species on the planet.",
@@ -321,7 +372,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "doubt": "Be careful about how you answer this."
+    "doubt": "Be careful about how you answer this.",
+    "votes":[2, 2, 1, 2, 4]
   }
   
 ]
@@ -329,3 +381,111 @@ const questions = [
 function getRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+function Typewriter (sSelector, nRate) {
+  function clean () {
+    clearInterval(nIntervId);
+    bTyping = false;
+    bStart = true;
+    oCurrent = null;
+    aSheets.length = nIdx = 0;
+  }
+
+  function scroll (oSheet, nPos, bEraseAndStop) {
+    if (!oSheet.hasOwnProperty('parts') || aMap.length < nPos) { return true; }
+
+    var oRel, bExit = false;
+
+    if (aMap.length === nPos) { aMap.push(0); }
+
+    while (aMap[nPos] < oSheet.parts.length) {
+      oRel = oSheet.parts[aMap[nPos]];
+
+      scroll(oRel, nPos + 1, bEraseAndStop) ? aMap[nPos]++ : bExit = true;
+
+      if (bEraseAndStop && (oRel.ref.nodeType - 1 | 1) === 3 && oRel.ref.nodeValue) {
+        bExit = true;
+        oCurrent = oRel.ref;
+        sPart = oCurrent.nodeValue;
+        oCurrent.nodeValue = '';
+      }
+
+      oSheet.ref.appendChild(oRel.ref);
+      if (bExit) { return false; }
+    }
+
+    aMap.length--;
+    return true;
+  }
+
+  function typewrite () {
+    if (sPart.length === 0 && scroll(aSheets[nIdx], 0, true) && nIdx++ === aSheets.length - 1) { clean(); return; }
+
+    oCurrent.nodeValue += sPart.charAt(0);
+    sPart = sPart.slice(1);
+  }
+
+  function Sheet (oNode) {
+    this.ref = oNode;
+    if (!oNode.hasChildNodes()) { return; }
+    this.parts = Array.prototype.slice.call(oNode.childNodes);
+
+    for (var nChild = 0; nChild < this.parts.length; nChild++) {
+      oNode.removeChild(this.parts[nChild]);
+      this.parts[nChild] = new Sheet(this.parts[nChild]);
+    }
+  }
+
+  var
+    nIntervId, oCurrent = null, bTyping = false, bStart = true,
+    nIdx = 0, sPart = "", aSheets = [], aMap = [];
+
+  this.rate = nRate || 100;
+
+  this.play = function () {
+    if (bTyping) { return; }
+    if (bStart) {
+      var aItems = document.querySelectorAll(sSelector);
+
+      if (aItems.length === 0) { return; }
+      for (var nItem = 0; nItem < aItems.length; nItem++) {
+        aSheets.push(new Sheet(aItems[nItem]));
+        /* Uncomment the following line if you have previously hidden your elements via CSS: */
+        // aItems[nItem].style.visibility = "visible";
+      }
+
+      bStart = false;
+    }
+
+    nIntervId = setInterval(typewrite, this.rate);
+    bTyping = true;
+  };
+
+  this.pause = function () {
+    clearInterval(nIntervId);
+    bTyping = false;
+  };
+
+  this.terminate = function () {
+    oCurrent.nodeValue += sPart;
+    sPart = "";
+    for (nIdx; nIdx < aSheets.length; scroll(aSheets[nIdx++], 0, false));
+    clean();
+  };
+}
+
+/* usage: */
+// var oTWExample1 = new Typewriter(/* elements: */ '#welcome', /* frame rate (optional): */ 20);
+
+// onload = function () {
+//   oTWExample1.play();
+// };
