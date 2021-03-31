@@ -8,6 +8,7 @@ let ypage = document.getElementById('yes')
 let npage = document.getElementById('no')
 let timed = document.getElementById('timed')
 let app = document.getElementById('app')
+let choices = document.getElementsByClassName('fakebutton')
 let lastAnswers = document.getElementById('lastanswers')
 let cohort = document.getElementById("cohort")
 let groupNum = document.getElementById("group_num")
@@ -24,6 +25,13 @@ let score = {
   Resistant: 0,
   Troll: 0,
   Fool: 0
+}
+
+//BUTTONS
+const choicevar = ['t', 'f', 'it', 'idk']
+for (let c = 0; c < choices.length; c++){
+  // console.log(c)
+  choices[c].addEventListener('click', () => {answeredQ(choicevar[c])});
 }
 
 //INTROS
@@ -242,8 +250,6 @@ function judgementStage(h) {
     lastAnswers.appendChild(a);
   }
 }
-
-
 }
 
 //YES REGRET LINK
