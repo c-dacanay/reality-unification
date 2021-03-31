@@ -30,7 +30,6 @@ let score = {
 //BUTTONS
 const choicevar = ['t', 'f', 'it', 'idk']
 for (let c = 0; c < choices.length; c++){
-  // console.log(c)
   choices[c].addEventListener('click', () => {answeredQ(choicevar[c])});
 }
 
@@ -99,7 +98,6 @@ function beginQuiz(){
 
     let slow = new Typewriter('#timer', 45)
     slow.play();
-
     setTimeout(switchPage, d, "quiz");
     setTimeout(generateQuestion, d);
 }
@@ -107,12 +105,12 @@ function beginQuiz(){
 function cohortAnswers(q){
   //Jesus
   const shuffled = cvotes.sort(() => 0.5 - Math.random());
-  console.log(shuffled)
+  // console.log(shuffled)
   let qu = q;
   let iterator = function (i, q) {
     let selected = shuffled.slice(0, 1)
     if (i < shuffled.length ) {
-      console.log(qu.vtimes)
+      // console.log(qu.vtimes)
       setTimeout(()=> {iterator(i);}, getRandom(qu.vtimes));
             if (qu.votes[i] === 1) {
               shuffled[i].style.fill = "#009C2C"
@@ -127,7 +125,6 @@ function cohortAnswers(q){
       ansLock = false;
     }
   };
-
   iterator(0)
 }
 
@@ -167,15 +164,14 @@ function doubtSelf(answer, lastAns) {
     }
 }
 
-function generateQuestion() {
+function generateQuestion(q) {
   //CLEAR COHORT VOTES WHEN GENERATED
-  ansLock = true;
   for (c in cvotes) { cvotes[c].style.fill = "none"}
   q = questions[factNum];
   fact.innerHTML = q.question
   //MAKE THIS BETTER
   // setTimeout(cohortAnswers, 2000, q);
-  cohortAnswers(q);
+  // cohortAnswers(q);
   
   //REMOVE COHORT MEMBER
   if (questions[factNum]["evt"] === true){
@@ -196,14 +192,16 @@ function switchPage(a, b){
 }
 
 function answeredQ(element) {
-  console.log(ansLock)
   let answer = element
+  ansLock = true;
+  q = questions[factNum];
+  cohortAnswers(q);
+
   //IF THERE IS A DOUBT
   if (q.doubt && factNum < questions.length - 1) {
     doubtSelf(answer, lastAns);
   } else {
     addScore(personalityType(answer), 1);
-  console.log(score, factNum)
   lastAns = answer;
 
   //IF WE ARE AT THE END
@@ -213,9 +211,10 @@ function answeredQ(element) {
   } else {
     factNum++
     if (!ansLock){
-    generateQuestion();
+    generateQuestion(q);
   }
   }
+  console.log(score, factNum)
 }
 
 //ENDINGS
@@ -260,7 +259,6 @@ function regret() {
   addScore('Compliant', 5)
 }
 
-
 //DETERMINE ME DADDY
 function personalityType(answer){
   let personality;
@@ -273,7 +271,7 @@ function personalityType(answer){
   } else {
     personality = q.idk
   }
-  console.log('personality', personality)
+  // console.log('personality', personality)
   return personality
 }
 

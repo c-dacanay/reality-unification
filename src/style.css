@@ -29,7 +29,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* display: none; */
+  display: none;
 }
 
 #cohort h4, h6{
@@ -142,21 +142,21 @@ a, a:hover, a:visited {
     text-decoration: none;
 }
 
-.choices a:hover, .selections a:hover {
+.choices a:hover, a:focus, .selections a:hover {
 	color: white;
 	text-decoration: none;
 }
 
-.choices a:nth-of-type(1):hover, a:nth-of-type(1):active{
+.choices a:nth-of-type(1):hover, a:nth-of-type(1):focus{
 	background-color: #009C2C;
 }
-.choices a:nth-of-type(2):hover, a:nth-of-type(2):active{
+.choices a:nth-of-type(2):hover, a:nth-of-type(2):focus{
 	background-color: #F03329;
 }
-.choices a:nth-of-type(3):hover, a:nth-of-type(3):active{
+.choices a:nth-of-type(3):hover, a:nth-of-type(3):focus{
 	background-color: #FF8C00;
 }
-.choices a:nth-of-type(4):hover, a:nth-of-type(4):active, .selections a:hover {
+.choices a:nth-of-type(4):hover, a:nth-of-type(4):active, .selections a:focus {
 	/* background-color:  rgba(226, 226, 216, 1); */
   background-color: gray;
 }
