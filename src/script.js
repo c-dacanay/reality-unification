@@ -15,7 +15,7 @@ let cvotes = []
 let q = null;
 let factNum = 0;
 let lastAns;
-
+let ansLock = false;
 //TODO:
 //Weighing
 
@@ -26,7 +26,7 @@ let score = {
   Fool: 0
 }
 
-//Introductions
+//INTROS
 document.getElementById("yesBtn").addEventListener("click", () => {introQ('yes')})
 document.getElementById("noBtn").addEventListener("click", () => {introQ('no')})
 document.getElementById("y1").addEventListener("click", () => {introQ('y1')})
@@ -38,6 +38,7 @@ document.getElementById("n2").addEventListener("click", () => {introQ('n2')})
 document.getElementById("n3").addEventListener("click", () => {introQ('n3')})
 document.getElementById("n4").addEventListener("click", () => {introQ('n4')})
 
+//THIS? THIS IS TRULY TERRIBLE BUT IT CAN'T BE HELPED?
 function introQ(evt){
 let event = evt;
   if (evt == 'yes'){
@@ -75,7 +76,8 @@ let event = evt;
     beginQuiz('n')
   } 
 }
-let delay = 1000
+
+let d = 1000
 function beginQuiz(){
     switchPage("timed")
     //COHORT INFO
@@ -90,21 +92,35 @@ function beginQuiz(){
     let slow = new Typewriter('#timer', 45)
     slow.play();
 
-    setTimeout(switchPage, delay, "quiz");
-    setTimeout(generateQuestion, delay);
+    setTimeout(switchPage, d, "quiz");
+    setTimeout(generateQuestion, d);
 }
 
 function cohortAnswers(q){
-  for (c in cvotes) {
-    if (q.votes[c] === 1) {
-      cvotes[c].style.fill = "#009C2C"
-    } else if (q.votes[c] === 2) {
-      cvotes[c].style.fill = "#F03329"
-    } else if (q.votes[c] === 3) {
-      cvotes[c].style.fill = "#FF8C00"
-    } else if (q.votes[c] === 4) 
-      cvotes[c].style.fill = "#9E9E9E"
-  }
+  //Jesus
+  const shuffled = cvotes.sort(() => 0.5 - Math.random());
+  console.log(shuffled)
+  let qu = q;
+  let iterator = function (i, q) {
+    let selected = shuffled.slice(0, 1)
+    if (i < shuffled.length ) {
+      console.log(qu.vtimes)
+      setTimeout(()=> {iterator(i);}, getRandom(qu.vtimes));
+            if (qu.votes[i] === 1) {
+              shuffled[i].style.fill = "#009C2C"
+            } else if (qu.votes[i] === 2) {
+              shuffled[i].style.fill = "#F03329"
+            } else if (qu.votes[i] === 3) {
+              shuffled[i].style.fill = "#FF8C00"
+            } else if (qu.votes[i] === 4) {
+              shuffled[i].style.fill = "#9E9E9E"
+          } i++
+    } else {
+      ansLock = false;
+    }
+  };
+
+  iterator(0)
 }
 
 //REGARDING DOUBT
@@ -145,17 +161,16 @@ function doubtSelf(answer, lastAns) {
 
 function generateQuestion() {
   //CLEAR COHORT VOTES WHEN GENERATED
+  ansLock = true;
   for (c in cvotes) { cvotes[c].style.fill = "none"}
   q = questions[factNum];
   fact.innerHTML = q.question
   //MAKE THIS BETTER
-  setTimeout(cohortAnswers, 2000, q);
-
+  // setTimeout(cohortAnswers, 2000, q);
+  cohortAnswers(q);
+  
   //REMOVE COHORT MEMBER
-  if (factNum === 0){
-    document.getElementById("troublemaker").style.display = "flex";
-  }
-  if (factNum > 9) {
+  if (questions[factNum]["evt"] === true){
     document.getElementById("troublemaker").style.display = "none";
   }
 }
@@ -167,43 +182,32 @@ function switchPage(a, b){
   timed.style.display = "none";
   quiz.style.display = "none";
   assessment.style.display = "none";
-
   let p1 = eval(a);
   p1.style.display = "block";
-  
   if (b) {   let p2 = eval(b); b.style.display = "block"}
-  // generateQuestion();
 }
 
 function answeredQ(element) {
+  console.log(ansLock)
   let answer = element
-  console.log(q.doubt);
+  //IF THERE IS A DOUBT
   if (q.doubt && factNum < questions.length - 1) {
-  // if (q.doubt) {
     doubtSelf(answer, lastAns);
   } else {
-    let personality;
-    if (answer == 't') {
-      personality = q.t
-    } else if (answer == 'f') {
-      personality = q.f
-    } else if (answer == 'it') {
-      personality = q.it
-    } else {
-      personality = q.idk
-    }
-  score[personality]++
-
-    if (factNum === questions.length - 1){
-      let highest = getHighest(score, 1)
-      judgementStage(highest)
-    } else {
-      factNum++
-      generateQuestion();
-    }
+    addScore(personalityType(answer), 1);
   console.log(score, factNum)
   lastAns = answer;
-  // generateQuestion();
+
+  //IF WE ARE AT THE END
+  if (factNum === questions.length - 1){
+    let highest = getHighest(score, 1)
+    judgementStage(highest)
+  } else {
+    factNum++
+    if (!ansLock){
+    generateQuestion();
+  }
+  }
 }
 
 //ENDINGS
@@ -247,15 +251,30 @@ let regretLink = document.getElementById("regrets")
 function regret() {
   regretLink.innerHTML = `<p>
   In our attempt to keep reality unified, it is important that you answer our questions while being as true to yourself as possible. If you clicked “yes” out of fear and were more intrigued by the “no” option,  please let us know.</p> <p>Thank you for letting us know that you were more aligned with the “no” option, yet clicked “yes”. We will take this into account when we process your survey results.</p>`
-  for (let i = 0; i < 5;i++){
-    score["Compliant"]++
+  addScore('Compliant', 5)
+}
+
+
+//DETERMINE ME DADDY
+function personalityType(answer){
+  let personality;
+  if (answer == 't') {
+    personality = q.t
+  } else if (answer == 'f') {
+    personality = q.f
+  } else if (answer == 'it') {
+    personality = q.it
+  } else {
+    personality = q.idk
   }
+  console.log('personality', personality)
+  return personality
 }
 
 //ADD MULTIPLE SCORE
-function addScore(p, num){
+function addScore(ans, num){
   for (i = 0; i < num; i++){
-    score[p]++
+    score[ans]++
   }
 }
 
@@ -276,7 +295,6 @@ return requiredObj;
 function getRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-
 
 //DEBUG HELPERS
 function myButton() {

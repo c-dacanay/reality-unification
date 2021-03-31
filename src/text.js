@@ -43,7 +43,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
+    "votes":[1, 1, 1, 2, 1],
+    "vtimes": 1000
   },
   {
     "question": "Basketball is a team ball sport. Points are scored by shooting a basketball through an elevated hoop.",
@@ -51,7 +52,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[1, 1, 4, 2, 1]
+    "votes":[1, 1, 4, 2, 1],
+    "vtimes": 8000
   },
   {
     "question": "Abu Dhabi is the capital of the United Arab Emirates.",
@@ -59,7 +61,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[4, 1, 1, 1, 4]
+    "votes":[4, 1, 1, 1, 4],
+    "vtimes": 11000
   },
   {
     "question": "Human men and women are biologically different.",
@@ -68,7 +71,8 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "doubt": "Would you like to choose a different answer?",
-    "votes":[2, 3, 1, 3, 1]
+    "votes":[2, 3, 1, 3, 1],
+    "vtimes": 3000
   },
   {
     "question": "Rice is a grain that is a widely consumed staple food. It provides one-fifth of the calories consumed by humans.",
@@ -76,7 +80,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[3, 1, 1, 4, 4]
+    "votes":[3, 1, 1, 4, 4],
+    "vtimes": 2000
   },
   {
     "question": "Horses are domesticated mammals that have a variety of uses. Humans throughout history have interacted with horses in sports, police work, agriculture, and war.",
@@ -84,7 +89,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
+    "votes":[1, 1, 1, 2, 1],
+    "vtimes": 6000
   },
   {
     "question": "Matriarchy is a social system in which females hold primary power positions. There are no known societies that are unambiguously matriarchal.",
@@ -93,7 +99,8 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "doubt": "Are you sure about that?",
-    "votes":[4, 2, 1, 1, 3]
+    "votes":[4, 2, 1, 1, 3],
+    "vtimes": 8000
   },
   {
     "question": "A language is a system of communication used by humans that consist of speech and gesture. Language is present in all human cultures.",
@@ -101,7 +108,8 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[1, 1, 1, 3, 1]
+    "votes":[1, 1, 1, 3, 1],
+    "vtimes": 6000
   },
   {
     "question": "US Supreme Court ruled that threats against the President are not protected speech.",
@@ -110,7 +118,8 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     // "doubt": "Think about this carefully",
-    "votes":[2, 3, 1, 1, 4]
+    "votes":[2, 3, 1, 1, 4],
+    "vtimes": 8000
   },
   {
     "question": "No under age person can have consensual sex.",
@@ -119,7 +128,8 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "doubt": "Your peers might not approve of that answer.",
-    "votes":[1, 1, 1, 2, 1]
+    "votes":[1, 1, 1, 2, 1],
+    "vtimes": 1000
   },
   {
     "question": "A hypocrite is a person who does the same thing that they condemn another person for doing.",
@@ -127,7 +137,9 @@ const questions = [
     "f": "Troll",
     "it": "Resistant",
     "idk": "Fool",
-    "votes":[1, 1, 1, 2, 1]
+    "votes":[1, 1, 1, 2, 1],
+    "evt": true,
+    "vtimes": 2000
   },
   {
     "question": "Human action is the primary cause of climate change.",
@@ -136,7 +148,8 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "doubt": "Be careful about how you answer this.",
-    "votes":[2, 2, 3, 2, 1]
+    "votes":[2, 2, 3, 2, 1],
+    "vtimes": 1000
   },
   {
     "question": "Humans are the most adaptable species on the planet.",
@@ -145,6 +158,7 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "doubt": "Be careful about how you answer this.",
-    "votes":[2, 2, 1, 2, 4]
+    "votes":[2, 2, 1, 2, 4],
+    "vtimes": 6000
   }
 ];
