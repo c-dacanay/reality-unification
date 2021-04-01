@@ -16,9 +16,11 @@ let cvotes = []
 let q = null;
 let factNum = 0;
 let lastAns;
+let clickLock = false;
 let ansLock = false;
 //TODO:
 //Weighing
+//FIX DOUBT!!
 
 let score = {
   Compliant: 0,
@@ -33,7 +35,9 @@ for (let c = 0; c < choices.length; c++){
   choices[c].addEventListener('click', () => {answeredQ(choicevar[c])});
 }
 
-//INTROS
+
+
+//INTROS--SIGH
 document.getElementById("yesBtn").addEventListener("click", () => {introQ('yes')})
 document.getElementById("noBtn").addEventListener("click", () => {introQ('no')})
 document.getElementById("y1").addEventListener("click", () => {introQ('y1')})
@@ -96,8 +100,8 @@ function beginQuiz(){
     }
     cohort.style.display = "flex"
 
-    let slow = new Typewriter('#timer', 45)
-    slow.play();
+    // let slow = new Typewriter('#timer', 45)
+    // slow.play();
     setTimeout(switchPage, d, "quiz");
     setTimeout(generateQuestion, d);
 }
@@ -108,7 +112,7 @@ function cohortAnswers(q){
   // console.log(shuffled)
   let qu = q;
   let iterator = function (i, q) {
-    let selected = shuffled.slice(0, 1)
+    // let selected = shuffled.slice(0, 1)
     if (i < shuffled.length ) {
       // console.log(qu.vtimes)
       setTimeout(()=> {iterator(i);}, getRandom(qu.vtimes));
@@ -123,9 +127,11 @@ function cohortAnswers(q){
           } i++
     } else {
       ansLock = false;
-    }
-  };
+      generateQuestion();
+    };
+  }
   iterator(0)
+  // }
 }
 
 //REGARDING DOUBT
@@ -134,6 +140,11 @@ function doubtSelf(answer, lastAns) {
   if (showDoubt == false) {
   doubt.innerHTML = q.doubt;
   showDoubt = true;
+  for (let c = 0; c < choices.length; c++){
+    if (choices[c].classList.contains("disabled")){
+      choices[c].classList.remove("disabled")
+    }
+  }
   } else {
     //if the doubt html has shown once
       showDoubt = false;
@@ -148,14 +159,12 @@ function doubtSelf(answer, lastAns) {
         } else {
           personality = q.idk
         }
-        factNum++
         generateQuestion();
         delete q.doubt
         doubt.innerHTML = "";
-        score[personality]++
+        addScore(personality, 3)
         } else {
         //If user changes their answer they're compliant regardless
-        factNum++
         generateQuestion();
         delete q.doubt;
         doubt.innerHTML = "";
@@ -164,19 +173,73 @@ function doubtSelf(answer, lastAns) {
     }
 }
 
-function generateQuestion(q) {
-  //CLEAR COHORT VOTES WHEN GENERATED
-  for (c in cvotes) { cvotes[c].style.fill = "none"}
+function handleButtons(answer) {
+  console.log('buttons HANDLED')
+  for (let c = 0; c < choices.length; c++){
+    choices[c].classList.add("disabled")
+  }
+  if (answer == 't') {
+    choices[0].classList.remove("disabled")
+  } else if (answer == 'f') {
+    choices[1].classList.remove("disabled")
+  } else if (answer == 'it') {
+    choices[2].classList.remove("disabled")
+  } else {
+    choices[3].classList.remove("disabled")
+  }
+}
+
+function generateQuestion(answer, lastAns) {
   q = questions[factNum];
-  fact.innerHTML = q.question
+  //if cohort is done and user is done, move to next question
+  if (!ansLock && !clickLock){
+    fact.innerHTML = q.question
+    ansLock = true;
+    clickLock = true;
+    // console.log('this stuff')
+    //CLEAR COHORT VOTES WHEN GENERATED
+    for (c in cvotes) { cvotes[c].style.fill = "none"}
+    for (let c = 0; c < choices.length; c++){
+    if (choices[c].classList.contains("disabled")){
+      choices[c].classList.remove("disabled")
+      }
+    }
+    cohortAnswers(q);
+    // BAD BOI
+    if (questions[factNum]["evt"] === true){
+      document.getElementById("troublemaker").style.display = "none";
+    }
+    //IF IT'S TEH LAT QUESTION
+    if (factNum === questions.length - 1){
+      let highest = getHighest(score, 1)
+      judgementStage(highest)
+    } 
+
+    // if (q.doubt){
+    //   doubtSelf(answer,lastAns)
+    //   } else {
+        factNum++
+    //   }
+
+  } else {
+    // console.log('nope')
+  }
+
+  // for (let c = 0; c < choices.length; c++){
+  //   if (choices[i].classList.contains("disabled")) {
+  //     choices[i].classList.remove("disabled")
+  //   }
+  //     // console.log(choices[i].outerHTML)
+  // }
+
+  // console.log(choices)
+  // console.log(q.question)
   //MAKE THIS BETTER
   // setTimeout(cohortAnswers, 2000, q);
   // cohortAnswers(q);
   
   //REMOVE COHORT MEMBER
-  if (questions[factNum]["evt"] === true){
-    document.getElementById("troublemaker").style.display = "none";
-  }
+
 }
 
 function switchPage(a, b){
@@ -192,27 +255,21 @@ function switchPage(a, b){
 }
 
 function answeredQ(element) {
+  // console.log('clickLock', clickLock, 'ansLock', ansLock)
   let answer = element
-  ansLock = true;
   q = questions[factNum];
-  cohortAnswers(q);
-
+  // cohortAnswers(q);
+  handleButtons(answer);
   //IF THERE IS A DOUBT
-  if (q.doubt && factNum < questions.length - 1) {
+  clickLock = false;
+  // generateQuestion(answer, lastAns);
+  lastAns = answer;
+  if (q.doubt) {
     doubtSelf(answer, lastAns);
   } else {
+    console.log(answer, lastAns)
+    generateQuestion()
     addScore(personalityType(answer), 1);
-  lastAns = answer;
-
-  //IF WE ARE AT THE END
-  if (factNum === questions.length - 1){
-    let highest = getHighest(score, 1)
-    judgementStage(highest)
-  } else {
-    factNum++
-    if (!ansLock){
-    generateQuestion(q);
-  }
   }
   console.log(score, factNum)
 }
@@ -249,7 +306,7 @@ function judgementStage(h) {
     lastAnswers.appendChild(a);
   }
 }
-}
+// }
 
 //YES REGRET LINK
 let regretLink = document.getElementById("regrets")
@@ -319,7 +376,10 @@ function restartQuiz() {
     Troll: 0,
     Fool: 0
   }
+
   factNum = 0;
+  ansLock = false;
+  clickLock = false;
   generateQuestion()
 }
 
@@ -338,94 +398,94 @@ function testEndings(){
 }
 
 //THIS SHIT
-function Typewriter (sSelector, nRate) {
-  function clean () {
-    clearInterval(nIntervId);
-    bTyping = false;
-    bStart = true;
-    oCurrent = null;
-    aSheets.length = nIdx = 0;
-  }
+// function Typewriter (sSelector, nRate) {
+//   function clean () {
+//     clearInterval(nIntervId);
+//     bTyping = false;
+//     bStart = true;
+//     oCurrent = null;
+//     aSheets.length = nIdx = 0;
+//   }
 
-  function scroll (oSheet, nPos, bEraseAndStop) {
-    if (!oSheet.hasOwnProperty('parts') || aMap.length < nPos) { return true; }
+//   function scroll (oSheet, nPos, bEraseAndStop) {
+//     if (!oSheet.hasOwnProperty('parts') || aMap.length < nPos) { return true; }
 
-    var oRel, bExit = false;
+//     var oRel, bExit = false;
 
-    if (aMap.length === nPos) { aMap.push(0); }
+//     if (aMap.length === nPos) { aMap.push(0); }
 
-    while (aMap[nPos] < oSheet.parts.length) {
-      oRel = oSheet.parts[aMap[nPos]];
+//     while (aMap[nPos] < oSheet.parts.length) {
+//       oRel = oSheet.parts[aMap[nPos]];
 
-      scroll(oRel, nPos + 1, bEraseAndStop) ? aMap[nPos]++ : bExit = true;
+//       scroll(oRel, nPos + 1, bEraseAndStop) ? aMap[nPos]++ : bExit = true;
 
-      if (bEraseAndStop && (oRel.ref.nodeType - 1 | 1) === 3 && oRel.ref.nodeValue) {
-        bExit = true;
-        oCurrent = oRel.ref;
-        sPart = oCurrent.nodeValue;
-        oCurrent.nodeValue = '';
-      }
+//       if (bEraseAndStop && (oRel.ref.nodeType - 1 | 1) === 3 && oRel.ref.nodeValue) {
+//         bExit = true;
+//         oCurrent = oRel.ref;
+//         sPart = oCurrent.nodeValue;
+//         oCurrent.nodeValue = '';
+//       }
 
-      oSheet.ref.appendChild(oRel.ref);
-      if (bExit) { return false; }
-    }
+//       oSheet.ref.appendChild(oRel.ref);
+//       if (bExit) { return false; }
+//     }
 
-    aMap.length--;
-    return true;
-  }
+//     aMap.length--;
+//     return true;
+//   }
 
-  function typewrite () {
-    if (sPart.length === 0 && scroll(aSheets[nIdx], 0, true) && nIdx++ === aSheets.length - 1) { clean(); return; }
+//   function typewrite () {
+//     if (sPart.length === 0 && scroll(aSheets[nIdx], 0, true) && nIdx++ === aSheets.length - 1) { clean(); return; }
 
-    oCurrent.nodeValue += sPart.charAt(0);
-    sPart = sPart.slice(1);
-  }
+//     oCurrent.nodeValue += sPart.charAt(0);
+//     sPart = sPart.slice(1);
+//   }
 
-  function Sheet (oNode) {
-    this.ref = oNode;
-    if (!oNode.hasChildNodes()) { return; }
-    this.parts = Array.prototype.slice.call(oNode.childNodes);
+//   function Sheet (oNode) {
+//     this.ref = oNode;
+//     if (!oNode.hasChildNodes()) { return; }
+//     this.parts = Array.prototype.slice.call(oNode.childNodes);
 
-    for (var nChild = 0; nChild < this.parts.length; nChild++) {
-      oNode.removeChild(this.parts[nChild]);
-      this.parts[nChild] = new Sheet(this.parts[nChild]);
-    }
-  }
+//     for (var nChild = 0; nChild < this.parts.length; nChild++) {
+//       oNode.removeChild(this.parts[nChild]);
+//       this.parts[nChild] = new Sheet(this.parts[nChild]);
+//     }
+//   }
 
-  var
-    nIntervId, oCurrent = null, bTyping = false, bStart = true,
-    nIdx = 0, sPart = "", aSheets = [], aMap = [];
+//   var
+//     nIntervId, oCurrent = null, bTyping = false, bStart = true,
+//     nIdx = 0, sPart = "", aSheets = [], aMap = [];
 
-  this.rate = nRate || 100;
+//   this.rate = nRate || 100;
 
-  this.play = function () {
-    if (bTyping) { return; }
-    if (bStart) {
-      var aItems = document.querySelectorAll(sSelector);
+//   this.play = function () {
+//     if (bTyping) { return; }
+//     if (bStart) {
+//       var aItems = document.querySelectorAll(sSelector);
 
-      if (aItems.length === 0) { return; }
-      for (var nItem = 0; nItem < aItems.length; nItem++) {
-        aSheets.push(new Sheet(aItems[nItem]));
-        /* Uncomment the following line if you have previously hidden your elements via CSS: */
-        // aItems[nItem].style.visibility = "visible";
-      }
+//       if (aItems.length === 0) { return; }
+//       for (var nItem = 0; nItem < aItems.length; nItem++) {
+//         aSheets.push(new Sheet(aItems[nItem]));
+//         /* Uncomment the following line if you have previously hidden your elements via CSS: */
+//         // aItems[nItem].style.visibility = "visible";
+//       }
 
-      bStart = false;
-    }
+//       bStart = false;
+//     }
 
-    nIntervId = setInterval(typewrite, this.rate);
-    bTyping = true;
-  };
+//     nIntervId = setInterval(typewrite, this.rate);
+//     bTyping = true;
+//   };
 
-  this.pause = function () {
-    clearInterval(nIntervId);
-    bTyping = false;
-  };
+//   this.pause = function () {
+//     clearInterval(nIntervId);
+//     bTyping = false;
+//   };
 
-  this.terminate = function () {
-    oCurrent.nodeValue += sPart;
-    sPart = "";
-    for (nIdx; nIdx < aSheets.length; scroll(aSheets[nIdx++], 0, false));
-    clean();
-  };
-}
+//   this.terminate = function () {
+//     oCurrent.nodeValue += sPart;
+//     sPart = "";
+//     for (nIdx; nIdx < aSheets.length; scroll(aSheets[nIdx++], 0, false));
+//     clean();
+//   };
+// }

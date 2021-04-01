@@ -53,7 +53,7 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "votes":[1, 1, 4, 2, 1],
-    "vtimes": 8000
+    "vtimes": 3000
   },
   {
     "question": "Abu Dhabi is the capital of the United Arab Emirates.",
@@ -62,7 +62,7 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "votes":[4, 1, 1, 1, 4],
-    "vtimes": 11000
+    "vtimes": 4000
   },
   {
     "question": "Human men and women are biologically different.",

@@ -29,7 +29,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  display: none;
+  /* display: none; */
 }
 
 #cohort h4, h6{
@@ -156,9 +156,18 @@ a, a:hover, a:visited {
 .choices a:nth-of-type(3):hover, a:nth-of-type(3):focus{
 	background-color: #FF8C00;
 }
-.choices a:nth-of-type(4):hover, a:nth-of-type(4):active, .selections a:focus {
+.choices a:nth-of-type(4):hover, a:nth-of-type(4):active, .selections a:hover {
 	/* background-color:  rgba(226, 226, 216, 1); */
   background-color: gray;
+}
+
+.disabled {
+  color: grey;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: .5;
+  text-decoration: none;
+
 }
 h1, h2{
   /* font-family: 'Source Serif Pro', serif; */
