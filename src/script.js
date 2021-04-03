@@ -160,13 +160,11 @@ function doubtSelf(answer, lastAns) {
           personality = q.idk
         }
         generateQuestion();
-        delete q.doubt
         doubt.innerHTML = "";
         addScore(personality, 3)
         } else {
         //If user changes their answer they're compliant regardless
         generateQuestion();
-        delete q.doubt;
         doubt.innerHTML = "";
         addScore('Compliant', 5)
       }
@@ -190,7 +188,6 @@ function handleButtons(answer) {
 }
 
 function generateQuestion(answer, lastAns) {
-  q = questions[factNum];
   //if cohort is done and user is done, move to next question
   if (!ansLock && !clickLock){
     fact.innerHTML = q.question
@@ -198,13 +195,14 @@ function generateQuestion(answer, lastAns) {
     clickLock = true;
     // console.log('this stuff')
     //CLEAR COHORT VOTES WHEN GENERATED
-    for (c in cvotes) { cvotes[c].style.fill = "none"}
-    for (let c = 0; c < choices.length; c++){
-    if (choices[c].classList.contains("disabled")){
-      choices[c].classList.remove("disabled")
+      for (c in cvotes) { cvotes[c].style.fill = "none"}
+      for (let c = 0; c < choices.length; c++){
+      if (choices[c].classList.contains("disabled")){
+        choices[c].classList.remove("disabled")
+        }
       }
-    }
     cohortAnswers(q);
+    q = questions[factNum];
     // BAD BOI
     if (questions[factNum]["evt"] === true){
       document.getElementById("troublemaker").style.display = "none";
@@ -214,13 +212,7 @@ function generateQuestion(answer, lastAns) {
       let highest = getHighest(score, 1)
       judgementStage(highest)
     } 
-
-    // if (q.doubt){
-    //   doubtSelf(answer,lastAns)
-    //   } else {
         factNum++
-    //   }
-
   } else {
     // console.log('nope')
   }
@@ -257,7 +249,7 @@ function switchPage(a, b){
 function answeredQ(element) {
   // console.log('clickLock', clickLock, 'ansLock', ansLock)
   let answer = element
-  q = questions[factNum];
+  // q = questions[factNum];
   // cohortAnswers(q);
   handleButtons(answer);
   //IF THERE IS A DOUBT
