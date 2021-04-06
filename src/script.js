@@ -88,9 +88,10 @@ let event = evt;
   } 
 }
 
-let d = 1000
+let d = 1000;
 function beginQuiz(){
     switchPage("timed")
+
     //COHORT INFO
     groupNum.innerHTML = `Cohort #` + getRandom(1000)
     for (i=1; i<6; i++){
@@ -107,9 +108,7 @@ function beginQuiz(){
 }
 
 function cohortAnswers(q){
-  //Jesus
   const shuffled = cvotes.sort(() => 0.5 - Math.random());
-  // console.log(shuffled)
   let qu = q;
   let iterator = function (i, q) {
     // let selected = shuffled.slice(0, 1)
@@ -131,7 +130,6 @@ function cohortAnswers(q){
     };
   }
   iterator(0)
-  // }
 }
 
 //REGARDING DOUBT
@@ -140,6 +138,7 @@ function doubtSelf(answer, lastAns) {
   if (showDoubt == false) {
   doubt.innerHTML = q.doubt;
   showDoubt = true;
+  clickLock = true;
   for (let c = 0; c < choices.length; c++){
     if (choices[c].classList.contains("disabled")){
       choices[c].classList.remove("disabled")
@@ -148,25 +147,16 @@ function doubtSelf(answer, lastAns) {
   } else {
     //if the doubt html has shown once
       showDoubt = false;
-      let personality;
+      clickLock = false;
         if (lastAns === answer) { //if you stuck to your guns
-        if (answer == 't') {
-          personality = q.t
-        } else if (answer == 'f') {
-          personality = q.f
-        } else if (answer == 'it') {
-          personality = q.it
-        } else {
-          personality = q.idk
-        }
-        generateQuestion();
         doubt.innerHTML = "";
-        addScore(personality, 3)
+        addScore(personalityType(answer), 3)
+        generateQuestion();
         } else {
         //If user changes their answer they're compliant regardless
-        generateQuestion();
         doubt.innerHTML = "";
         addScore('Compliant', 5)
+        generateQuestion();
       }
     }
 }
@@ -190,10 +180,11 @@ function handleButtons(answer) {
 function generateQuestion(answer, lastAns) {
   //if cohort is done and user is done, move to next question
   if (!ansLock && !clickLock){
+    q = questions[factNum];
     fact.innerHTML = q.question
     ansLock = true;
     clickLock = true;
-    // console.log('this stuff')
+
     //CLEAR COHORT VOTES WHEN GENERATED
       for (c in cvotes) { cvotes[c].style.fill = "none"}
       for (let c = 0; c < choices.length; c++){
@@ -202,9 +193,9 @@ function generateQuestion(answer, lastAns) {
         }
       }
     cohortAnswers(q);
-    q = questions[factNum];
+
     // BAD BOI
-    if (questions[factNum]["evt"] === true){
+    if (q["evt"] === true){
       document.getElementById("troublemaker").style.display = "none";
     }
     //IF IT'S TEH LAT QUESTION
@@ -216,22 +207,6 @@ function generateQuestion(answer, lastAns) {
   } else {
     // console.log('nope')
   }
-
-  // for (let c = 0; c < choices.length; c++){
-  //   if (choices[i].classList.contains("disabled")) {
-  //     choices[i].classList.remove("disabled")
-  //   }
-  //     // console.log(choices[i].outerHTML)
-  // }
-
-  // console.log(choices)
-  // console.log(q.question)
-  //MAKE THIS BETTER
-  // setTimeout(cohortAnswers, 2000, q);
-  // cohortAnswers(q);
-  
-  //REMOVE COHORT MEMBER
-
 }
 
 function switchPage(a, b){
@@ -247,23 +222,20 @@ function switchPage(a, b){
 }
 
 function answeredQ(element) {
-  // console.log('clickLock', clickLock, 'ansLock', ansLock)
   let answer = element
-  // q = questions[factNum];
-  // cohortAnswers(q);
   handleButtons(answer);
-  //IF THERE IS A DOUBT
   clickLock = false;
-  // generateQuestion(answer, lastAns);
-  lastAns = answer;
+
+  //IF THERE IS A DOUBT
   if (q.doubt) {
     doubtSelf(answer, lastAns);
-  } else {
     console.log(answer, lastAns)
+  } else {
     generateQuestion()
     addScore(personalityType(answer), 1);
   }
   console.log(score, factNum)
+  lastAns = answer;
 }
 
 //ENDINGS
@@ -320,7 +292,6 @@ function personalityType(answer){
   } else {
     personality = q.idk
   }
-  // console.log('personality', personality)
   return personality
 }
 

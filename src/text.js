@@ -100,7 +100,7 @@ const questions = [
     "idk": "Fool",
     "doubt": "Are you sure about that?",
     "votes":[4, 2, 1, 1, 3],
-    "vtimes": 8000
+    "vtimes": 4000
   },
   {
     "question": "A language is a system of communication used by humans that consist of speech and gesture. Language is present in all human cultures.",
@@ -109,7 +109,7 @@ const questions = [
     "it": "Resistant",
     "idk": "Fool",
     "votes":[1, 1, 1, 3, 1],
-    "vtimes": 6000
+    "vtimes": 3000
   },
   {
     "question": "US Supreme Court ruled that threats against the President are not protected speech.",
@@ -119,7 +119,7 @@ const questions = [
     "idk": "Fool",
     // "doubt": "Think about this carefully",
     "votes":[2, 3, 1, 1, 4],
-    "vtimes": 8000
+    "vtimes": 6000
   },
   {
     "question": "No under age person can have consensual sex.",
