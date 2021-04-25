@@ -35,8 +35,6 @@ for (let c = 0; c < choices.length; c++){
   choices[c].addEventListener('click', () => {answeredQ(choicevar[c])});
 }
 
-
-
 //INTROS--SIGH
 document.getElementById("yesBtn").addEventListener("click", () => {introQ('yes')})
 document.getElementById("noBtn").addEventListener("click", () => {introQ('no')})
@@ -88,7 +86,7 @@ let event = evt;
   } 
 }
 
-let d = 1000;
+let d = 10000;
 function beginQuiz(){
     switchPage("timed")
 
@@ -101,8 +99,9 @@ function beginQuiz(){
     }
     cohort.style.display = "flex"
 
-    // let slow = new Typewriter('#timer', 45)
-    // slow.play();
+    let slow = new Typewriter('#timer', 20)
+    slow.play();
+
     setTimeout(switchPage, d, "quiz");
     setTimeout(generateQuestion, d);
 }
@@ -361,94 +360,94 @@ function testEndings(){
 }
 
 //THIS SHIT
-// function Typewriter (sSelector, nRate) {
-//   function clean () {
-//     clearInterval(nIntervId);
-//     bTyping = false;
-//     bStart = true;
-//     oCurrent = null;
-//     aSheets.length = nIdx = 0;
-//   }
+function Typewriter (sSelector, nRate) {
+  function clean () {
+    clearInterval(nIntervId);
+    bTyping = false;
+    bStart = true;
+    oCurrent = null;
+    aSheets.length = nIdx = 0;
+  }
 
-//   function scroll (oSheet, nPos, bEraseAndStop) {
-//     if (!oSheet.hasOwnProperty('parts') || aMap.length < nPos) { return true; }
+  function scroll (oSheet, nPos, bEraseAndStop) {
+    if (!oSheet.hasOwnProperty('parts') || aMap.length < nPos) { return true; }
 
-//     var oRel, bExit = false;
+    var oRel, bExit = false;
 
-//     if (aMap.length === nPos) { aMap.push(0); }
+    if (aMap.length === nPos) { aMap.push(0); }
 
-//     while (aMap[nPos] < oSheet.parts.length) {
-//       oRel = oSheet.parts[aMap[nPos]];
+    while (aMap[nPos] < oSheet.parts.length) {
+      oRel = oSheet.parts[aMap[nPos]];
 
-//       scroll(oRel, nPos + 1, bEraseAndStop) ? aMap[nPos]++ : bExit = true;
+      scroll(oRel, nPos + 1, bEraseAndStop) ? aMap[nPos]++ : bExit = true;
 
-//       if (bEraseAndStop && (oRel.ref.nodeType - 1 | 1) === 3 && oRel.ref.nodeValue) {
-//         bExit = true;
-//         oCurrent = oRel.ref;
-//         sPart = oCurrent.nodeValue;
-//         oCurrent.nodeValue = '';
-//       }
+      if (bEraseAndStop && (oRel.ref.nodeType - 1 | 1) === 3 && oRel.ref.nodeValue) {
+        bExit = true;
+        oCurrent = oRel.ref;
+        sPart = oCurrent.nodeValue;
+        oCurrent.nodeValue = '';
+      }
 
-//       oSheet.ref.appendChild(oRel.ref);
-//       if (bExit) { return false; }
-//     }
+      oSheet.ref.appendChild(oRel.ref);
+      if (bExit) { return false; }
+    }
 
-//     aMap.length--;
-//     return true;
-//   }
+    aMap.length--;
+    return true;
+  }
 
-//   function typewrite () {
-//     if (sPart.length === 0 && scroll(aSheets[nIdx], 0, true) && nIdx++ === aSheets.length - 1) { clean(); return; }
+  function typewrite () {
+    if (sPart.length === 0 && scroll(aSheets[nIdx], 0, true) && nIdx++ === aSheets.length - 1) { clean(); return; }
 
-//     oCurrent.nodeValue += sPart.charAt(0);
-//     sPart = sPart.slice(1);
-//   }
+    oCurrent.nodeValue += sPart.charAt(0);
+    sPart = sPart.slice(1);
+  }
 
-//   function Sheet (oNode) {
-//     this.ref = oNode;
-//     if (!oNode.hasChildNodes()) { return; }
-//     this.parts = Array.prototype.slice.call(oNode.childNodes);
+  function Sheet (oNode) {
+    this.ref = oNode;
+    if (!oNode.hasChildNodes()) { return; }
+    this.parts = Array.prototype.slice.call(oNode.childNodes);
 
-//     for (var nChild = 0; nChild < this.parts.length; nChild++) {
-//       oNode.removeChild(this.parts[nChild]);
-//       this.parts[nChild] = new Sheet(this.parts[nChild]);
-//     }
-//   }
+    for (var nChild = 0; nChild < this.parts.length; nChild++) {
+      oNode.removeChild(this.parts[nChild]);
+      this.parts[nChild] = new Sheet(this.parts[nChild]);
+    }
+  }
 
-//   var
-//     nIntervId, oCurrent = null, bTyping = false, bStart = true,
-//     nIdx = 0, sPart = "", aSheets = [], aMap = [];
+  var
+    nIntervId, oCurrent = null, bTyping = false, bStart = true,
+    nIdx = 0, sPart = "", aSheets = [], aMap = [];
 
-//   this.rate = nRate || 100;
+  this.rate = nRate || 100;
 
-//   this.play = function () {
-//     if (bTyping) { return; }
-//     if (bStart) {
-//       var aItems = document.querySelectorAll(sSelector);
+  this.play = function () {
+    if (bTyping) { return; }
+    if (bStart) {
+      var aItems = document.querySelectorAll(sSelector);
 
-//       if (aItems.length === 0) { return; }
-//       for (var nItem = 0; nItem < aItems.length; nItem++) {
-//         aSheets.push(new Sheet(aItems[nItem]));
-//         /* Uncomment the following line if you have previously hidden your elements via CSS: */
-//         // aItems[nItem].style.visibility = "visible";
-//       }
+      if (aItems.length === 0) { return; }
+      for (var nItem = 0; nItem < aItems.length; nItem++) {
+        aSheets.push(new Sheet(aItems[nItem]));
+        /* Uncomment the following line if you have previously hidden your elements via CSS: */
+        // aItems[nItem].style.visibility = "visible";
+      }
 
-//       bStart = false;
-//     }
+      bStart = false;
+    }
 
-//     nIntervId = setInterval(typewrite, this.rate);
-//     bTyping = true;
-//   };
+    nIntervId = setInterval(typewrite, this.rate);
+    bTyping = true;
+  };
 
-//   this.pause = function () {
-//     clearInterval(nIntervId);
-//     bTyping = false;
-//   };
+  this.pause = function () {
+    clearInterval(nIntervId);
+    bTyping = false;
+  };
 
-//   this.terminate = function () {
-//     oCurrent.nodeValue += sPart;
-//     sPart = "";
-//     for (nIdx; nIdx < aSheets.length; scroll(aSheets[nIdx++], 0, false));
-//     clean();
-//   };
-// }
+  this.terminate = function () {
+    oCurrent.nodeValue += sPart;
+    sPart = "";
+    for (nIdx; nIdx < aSheets.length; scroll(aSheets[nIdx++], 0, false));
+    clean();
+  };
+}
