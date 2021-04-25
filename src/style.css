@@ -63,8 +63,10 @@ body, html {
 
 #group_num {
 text-align: center;
+display: block;
+
 /* color: gray; */
-display: none;
+/* display: none; */
 }
 
 h6 {
@@ -100,7 +102,7 @@ h6 {
 
 .passage {
   margin-top: 3%;
-  width: 65%;
+  /* width: 65%; */
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -112,9 +114,12 @@ h6 {
   height: 500px;
 }
 
-#welcome, #timer, #judgement {
+#welcome, #timer, #judgement, #assessment {
   text-align: left;
   margin: 4em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 65%;
 }
 
 #first, #yes, #no, #timed {

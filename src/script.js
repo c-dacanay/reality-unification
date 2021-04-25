@@ -18,9 +18,10 @@ let factNum = 0;
 let lastAns;
 let clickLock = false;
 let ansLock = false;
+
 //TODO:
 //Weighing
-//FIX DOUBT!!
+//ABOUT PAGE
 
 let score = {
   Compliant: 0,
@@ -35,7 +36,7 @@ for (let c = 0; c < choices.length; c++){
   choices[c].addEventListener('click', () => {answeredQ(choicevar[c])});
 }
 
-//INTROS--SIGH
+//INTROS
 document.getElementById("yesBtn").addEventListener("click", () => {introQ('yes')})
 document.getElementById("noBtn").addEventListener("click", () => {introQ('no')})
 document.getElementById("y1").addEventListener("click", () => {introQ('y1')})
