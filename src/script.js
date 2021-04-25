@@ -97,11 +97,10 @@ function beginQuiz(){
       x.innerHTML = `#`+getRandom(10000)
       cvotes.push(document.getElementById(`c`+i))
     }
-    cohort.style.display = "flex"
 
     let slow = new Typewriter('#timer', 20)
     slow.play();
-
+    setTimeout(function(){    cohort.style.display = "flex"}, (d*.8))
     setTimeout(switchPage, d, "quiz");
     setTimeout(generateQuestion, d);
 }

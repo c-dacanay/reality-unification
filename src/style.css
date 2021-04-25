@@ -15,31 +15,38 @@ body, html {
 
 #app {
   display: flex;
-  height: 99%;
-  border: solid black 3px;
-  /* border: solid rgba(226, 226, 216, 1) 3px; */
+  flex-direction: column;
+  /* border: solid black 3px; */
+  border: solid rgba(226, 226, 216, 1) 3px;
   /* width: 100%; */
+  height: 100%;
 }
 
 #cohort {
-  outline: solid black 3px;
-  width: 350px;
+  /* outline: solid black 3px; */
+  border: solid rgba(226, 226, 216, 1) 3px;
+  /* position: absolute; */
+  /* bottom: 40; */
+  /* align-self: flex-end; */
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  margin-top: 1em;
   display: none;
 }
 
 #cohort h4, h6{
 /* color: rgba(226, 226, 216, 1) */
-color: black;
+  color: black;
 }
+
 #cohort img{
-  margin-top: 1.5rem;
-  margin-bottom: .2rem;
   width: 60px;
   height: 60px;
-  opacity: .5;
+  /* opacity: .5; */
 }
 
 #cohort svg{
@@ -47,11 +54,19 @@ color: black;
   margin: .1rem;
 }
 
-#troublemaker {
+#troublemaker, .member {
+  padding: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+#group_num {
+text-align: center;
+/* color: gray; */
+display: none;
+}
+
 h6 {
   font-size: 14px;
   margin: .2em;
@@ -59,7 +74,8 @@ h6 {
 
 #fact {
   margin-left: auto;
-  margin-right: auto;  
+  margin-right: auto;
+  font-size: 16px;  
   line-height: 1.75;
 	text-align: center;
 	padding: 1rem;
@@ -68,7 +84,7 @@ h6 {
   /* color: rgba(226, 226, 216, 1); */
 	/* border: solid rgba(226, 226, 216, 1) 2px; */
   background-color: white;
-  width: 55%;
+  width: 600px;
 }
 
 #doubt {
@@ -93,6 +109,7 @@ h6 {
 
 #quiz {
   margin-top: 3%;
+  height: 500px;
 }
 
 #welcome, #timer, #judgement {
@@ -101,10 +118,11 @@ h6 {
 }
 
 #first, #yes, #no, #timed {
-width: 60%;
+width: 1200px;
 margin-left: auto;
 margin-right: auto;
 text-align: center;
+padding-bottom: 10rem;
 }
 #yes, #no, #quizContainer, #timed, #assess {
   display: none;
@@ -132,7 +150,7 @@ a, a:hover, a:visited {
 		/* border: solid rgba(226, 226, 216, 1) 1px; */
     color: black;
     border: solid black 1px;
-		font-size: .8em;
+		font-size: .9em;
     font-weight: bold;
     letter-spacing: .1rem;
     line-height: 1.75;
@@ -180,17 +198,15 @@ h1, h2{
 }
 
 h3 {
-  /* color: rgba(226, 226, 216, 1); */
-  /* color: chartreuse; */
   color: black;
-  text-align: left;
 	font-family: 'Ubuntu', 'Helvetica', sans-serif;
 	text-transform: uppercase;
 	letter-spacing: .1em;
 	font-size: 1.2em;
-  margin-left: auto;
-  margin-right: auto;  
+  margin-left: auth;
+  margin-right: auto;
   width: 55%;
+
 }
 
 h4 {
@@ -201,9 +217,27 @@ h4 {
 p {
   /* color: rgba(226, 226, 216, 1); */
   color: black;
-  line-height: 1.75rem;
+  line-height: 26px;
+  font-size: 18.5px;
 }
 
 /* .debug {
   border: solid red 1px;
 } */
+
+#mobile {
+  display: none;
+}
+
+@media screen and (max-width: 730px) {
+  #app {
+    display: none;
+  }
+
+  #mobile{
+    padding: 1em;
+    margin-top: 2em;
+    display: block;
+    /* text-align: center; */
+  }
+}
