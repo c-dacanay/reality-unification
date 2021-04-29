@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body, html {
   font-family: 'Ubuntu', 'Helvetica', sans-serif;
@@ -91,7 +92,7 @@ h6 {
 
 #doubt {
   margin-top: 2em;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Ubuntu', 'Helvetica', sans-serif;
 	text-align: center;
 	font-size: 1em;
   text-transform: uppercase;
@@ -191,17 +192,23 @@ a, a:hover, a:visited {
 
 }
 h1, h2{
-  /* font-family: 'Source Serif Pro', serif; */
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Ubuntu', 'Helvetica', sans-serif;
   line-height: 1;
   letter-spacing: .05em;
   text-align: center;
-  color: gray;
+  color: black;
   /* color: chartreuse; */
   margin: 0px;
   text-transform: uppercase;
 }
 
+#logo {
+margin-top: 2em;
+padding: 1em;
+display: inline-block;
+border: solid black 2px;
+/* width: 50%; */
+}
 h3 {
   color: black;
 	font-family: 'Ubuntu', 'Helvetica', sans-serif;
@@ -221,6 +228,7 @@ h4 {
 
 p {
   /* color: rgba(226, 226, 216, 1); */
+  font-family: 'Roboto';
   color: black;
   line-height: 26px;
   font-size: 18.5px;
